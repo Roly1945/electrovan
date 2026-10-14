@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electrovan - Panel de Administración</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0b192c] text-white font-sans min-h-screen">
+  
+  <!-- Header -->
+  <header class="bg-[#06111e] border-b border-blue-900/50 py-4 px-6 flex justify-between items-center shadow-md">
+    <div class="flex items-center gap-3">
+      <span class="bg-cyan-500 text-slate-900 font-black px-3 py-1.5 rounded-xl uppercase tracking-wider text-xs">Electrovan</span>
+      <h1 class="text-lg font-bold text-white">Panel de Administración</h1>
+    </div>
+    <a href="/" class="text-xs font-bold text-cyan-400 hover:text-cyan-300 transition">Ver Plataforma Pública &rarr;</a>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-8">
+
+    <!-- Sección 1: Agregar Vehículo -->
+    <div class="bg-[#1e3e62] rounded-2xl shadow-lg border border-blue-800/40 p-6 mb-8">
+      <h2 class="text-xl font-black text-cyan-400 mb-6">Agregar Nuevo Vehículo a la Flota</h2>
+      <form id="vehicleForm" onsubmit="createVehicle(event)" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <input type="text" id="vName" placeholder="Ej. BYD DOLPHIN" required class="bg-[#0b192c] border border-blue-900/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <input type="number" id="vRange" placeholder="Autonomía (km)" required class="bg-[#0b192c] border border-blue-900/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <input type="number" id="vBattery" placeholder="Batería (kWh)" required class="bg-[#0b192c] border border-blue-900/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <input type="number" id="vCapacity" placeholder="Capacidad (Pax)" required class="bg-[#0b192c] border border-blue-900/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <input type="number" id="vPrice" placeholder="Tarifa Diaria ($)" required class="bg-[#0b192c] border border-blue-900/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <div class="md:col-span-5 flex justify-end">
+          <button type="submit" class="bg-cyan-500 text-slate-900 font-bold px-6 py-3 rounded-xl hover:bg-cyan-400 transition shadow-lg">GUARDAR AUTO</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Sección 2: Flota Registrada -->
+    <div class="bg-[#1e3e62] rounded-2xl shadow-lg border border-blue-800/40 p-6 mb-8">
+      <h2 class="text-xl font-black text-white mb-6">Flota Registrada & Ofertas Promocionales</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-blue-900/50 text-xs text-slate-400 uppercase">
+              <th class="py-3 px-4">ID</th>
+              <th class="py-3 px-4">Nombre / Modelo</th>
+              <th class="py-3 px-4">Autonomía</th>
+              <th class="py-3 px-4">Batería</th>
+              <th class="py-3 px-4">Tarifa / Día</th>
+              <th class="py-3 px-4">Estado Oferta</th>
+              <th class="py-3 px-4 text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="vehiclesTableBody">
+            <!-- Dinámico -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sección 3: Administrador de Lugares de Entrega y Devolución -->
+    <div class="bg-[#1e3e62] rounded-2xl shadow-lg border border-blue-800/40 p-6 mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-black text-white">Lugares de Entrega y Devolución</h2>
+      </div>
+      <form id="locationForm" onsubmit="createLocation(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <input type="text" id="locName" placeholder="Nombre del lugar (Ej. Aeropuerto Internacional)" required class="bg-[#0b192c] border border-blue-900/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <input type="text" id="locCity" placeholder="Ciudad (Ej. Mérida)" required value="Mérida" class="bg-[#0b192c] border border-blue-900/50 rounded-xl p-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-cyan-400">
+        <button type="submit" class="bg-cyan-500 text-slate-900 font-bold rounded-xl p-3 text-sm hover:bg-cyan-400 transition shadow-lg">Agregar Lugar</button>
+      </form>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-blue-900/50 text-xs text-slate-400 uppercase">
+              <th class="py-3 px-4">ID</th>
+              <th class="py-3 px-4">Lugar / Sucursal</th>
+              <th class="py-3 px-4">Ciudad</th>
+              <th class="py-3 px-4">Estado</th>
+              <th class="py-3 px-4 text-right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="locationsTableBody">
+            <!-- Dinámico -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sección 4: Reservaciones Recibidas -->
+    <div class="bg-[#1e3e62] rounded-2xl shadow-lg border border-blue-800/40 p-6 mb-8">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-black text-white">Reservaciones Recibidas</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-blue-900/50 text-xs text-slate-400 uppercase">
+              <th class="py-3 px-4">Folio</th>
+              <th class="py-3 px-4">Cliente ID</th>
+              <th class="py-3 px-4">Vehículo ID</th>
+              <th class="py-3 px-4">Logística</th>
+              <th class="py-3 px-4">Fechas</th>
+              <th class="py-3 px-4">Días</th>
+              <th class="py-3 px-4">Total</th>
+              <th class="py-3 px-4">Estado</th>
+              <th class="py-3 px-4 text-right">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="reservationsTableBody">
+            <!-- Dinámico -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Cargar Vehículos
+    async function loadVehicles() {
+      try {
+        const res = await fetch("/api/vehicles");
+        const vehicles = await res.json();
+        const tbody = document.getElementById("vehiclesTableBody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        vehicles.forEach(v => {
+          tbody.innerHTML += `
+            <tr class="border-b border-blue-900/40 text-sm text-slate-200">
+              <td class="py-3 px-4 font-bold">#${v.id}</td>
+              <td class="py-3 px-4 font-semibold">${v.name}</td>
+              <td class="py-3 px-4">${v.range} km</td>
+              <td class="py-3 px-4">${v.battery} kWh</td>
+              <td class="py-3 px-4 font-bold text-cyan-400">$${v.price} MXN</td>
+              <td class="py-3 px-4">${v.is_offer ? '<span class="bg-amber-500/20 text-amber-300 px-2 py-1 rounded font-bold text-xs">En Oferta</span>' : 'Sin Oferta'}</td>
+              <td class="py-3 px-4 text-right space-x-2">
+                <button onclick="toggleOffer(${v.id})" class="text-xs bg-amber-500/10 text-amber-400 font-bold px-3 py-1.5 rounded-lg hover:bg-amber-500/20">🔥 Oferta</button>
+                <button onclick="deleteVehicle(${v.id})" class="text-xs bg-rose-500/10 text-rose-400 font-bold px-3 py-1.5 rounded-lg hover:bg-rose-500/20">Eliminar</button>
+              </td>
+            </tr>
+          `;
+        });
+      } catch (e) { console.error("Error cargando vehículos", e); }
+    }
+
+    async function createVehicle(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById("vName").value,
+        range: parseInt(document.getElementById("vRange").value),
+        battery: parseInt(document.getElementById("vBattery").value),
+        capacity: parseInt(document.getElementById("vCapacity").value),
+        price: parseFloat(document.getElementById("vPrice").value),
+        image_url: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=600&q=80"
+      };
+      const res = await fetch("/api/vehicles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        document.getElementById("vehicleForm").reset();
+        loadVehicles();
+      } else {
+        alert("Error al guardar vehículo");
+      }
+    }
+
+    async function deleteVehicle(id) {
+      if (!confirm("¿Eliminar vehículo?")) return;
+      await fetch(`/api/vehicles/${id}`, { method: "DELETE" });
+      loadVehicles();
+    }
+
+    async function toggleOffer(id) {
+      await fetch(`/api/vehicles/${id}/toggle-offer`, { method: "POST" });
+      loadVehicles();
+    }
+
+    // Cargar Lugares
+    async function loadLocations() {
+      try {
+        const res = await fetch("/api/locations");
+        const locations = await res.json();
+        const tbody = document.getElementById("locationsTableBody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        locations.forEach(loc => {
+          tbody.innerHTML += `
+            <tr class="border-b border-blue-900/40 text-sm text-slate-200">
+              <td class="py-3 px-4 font-bold">#${loc.id}</td>
+              <td class="py-3 px-4 font-semibold">${loc.name}</td>
+              <td class="py-3 px-4">${loc.city || 'Mérida'}</td>
+              <td class="py-3 px-4"><span class="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-bold">Activo</span></td>
+              <td class="py-3 px-4 text-right">
+                <button onclick="deleteLocation(${loc.id})" class="text-rose-400 hover:text-rose-300 font-bold text-xs bg-rose-500/10 px-3 py-1.5 rounded-lg">Eliminar</button>
+              </td>
+            </tr>
+          `;
+        });
+      } catch (e) { console.error("Error cargando lugares", e); }
+    }
+
+    async function createLocation(e) {
+      e.preventDefault();
+      const name = document.getElementById("locName").value;
+      const city = document.getElementById("locCity").value;
+      const res = await fetch("/api/locations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, city, active: true })
+      });
+      if (res.ok) {
+        document.getElementById("locationForm").reset();
+        loadLocations();
+      } else {
+        alert("Error al crear el lugar");
+      }
+    }
+
+    async function deleteLocation(id) {
+      if (!confirm("¿Estás seguro de eliminar este lugar?")) return;
+      await fetch(`/api/locations/${id}`, { method: "DELETE" });
+      loadLocations();
+    }
+
+    // Cargar Reservaciones
+    async function loadReservations() {
+      try {
+        const res = await fetch("/api/reservations");
+        const reservations = await res.json();
+        const tbody = document.getElementById("reservationsTableBody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+        reservations.forEach(r => {
+          tbody.innerHTML += `
+            <tr class="border-b border-blue-900/40 text-sm text-slate-200">
+              <td class="py-3 px-4 font-bold text-cyan-400">${r.folio || ('#' + r.id)}</td>
+              <td class="py-3 px-4">Cliente #${r.client_id}</td>
+              <td class="py-3 px-4">Vehículo #${r.vehicle_id}</td>
+              <td class="py-3 px-4 text-xs">${r.pickup_location} &rarr; ${r.return_location}</td>
+              <td class="py-3 px-4 text-xs">${r.start_date} al ${r.end_date}</td>
+              <td class="py-3 px-4">${r.days} días</td>
+              <td class="py-3 px-4 font-bold text-emerald-400">$${r.total_price} MXN</td>
+              <td class="py-3 px-4"><span class="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-1 rounded-full font-bold">${r.status}</span></td>
+              <td class="py-3 px-4 text-right">
+                <button onclick="deleteReservation(${r.id})" class="text-xs bg-rose-500/10 text-rose-400 font-bold px-3 py-1.5 rounded-lg hover:bg-rose-500/20">Eliminar</button>
+              </td>
+            </tr>
+          `;
+        });
+      } catch (e) { console.error("Error cargando reservaciones", e); }
+    }
+
+    async function deleteReservation(id) {
+      if (!confirm("¿Deseas eliminar esta reservación?")) return;
+      await fetch(`/api/reservations/${id}`, { method: "DELETE" });
+      loadReservations();
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      loadVehicles();
+      loadLocations();
+      loadReservations();
+    });
+  </script>
+</body>
+</html>

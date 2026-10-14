@@ -1,0 +1,390 @@
+with open("frontend/index.html", "w", encoding="utf-8") as f:
+    f.write("""<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electrovan - Renta de Autos Eléctricos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans antialiased min-h-screen">
+
+  <!-- Header / Barra Superior -->
+  <header class="bg-slate-950 border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="bg-amber-500 text-slate-950 font-black px-3 py-1.5 rounded-xl text-lg tracking-wider">ELECTROVAN</span>
+        <span class="text-xs uppercase tracking-widest text-slate-400 font-semibold hidden sm:inline">Movilidad Sostenible</span>
+      </div>
+      <div>
+        <a href="/admin.html" class="bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-xl transition">Panel de Administración</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Banner Promocional / Chubb Travel Care -->
+  <section class="bg-amber-500 text-slate-950 py-4 px-6 text-center font-black tracking-wide shadow-md">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-2 text-sm sm:text-base">
+      <span>🏁 Agrega Chubb Travel Care+ y Participa para ganar un pase doble para la carrera automovilística más importante del año</span>
+    </div>
+  </section>
+
+  <!-- Contenedor Principal de Búsqueda y Reserva -->
+  <main class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+    
+    <!-- Módulo de Reserva (3 Filas) -->
+    <div class="bg-white text-slate-900 rounded-3xl shadow-2xl p-6 sm:p-8 border border-slate-100 max-w-5xl mx-auto space-y-6">
+      <div class="flex items-center justify-between border-b pb-4">
+        <h2 class="text-xl font-black text-amber-500 uppercase tracking-wider">Reserva Aquí</h2>
+        <span class="text-xs text-slate-400 font-bold uppercase">Mínimo 24 horas de anticipación</span>
+      </div>
+
+      <!-- Fila 1: Recolección -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <div class="text-sm font-black text-slate-700 uppercase">Recolección</div>
+        <div>
+          <select id="pickupLocation" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="" disabled selected>¿Dónde necesitas tu auto?</option>
+            <option value="Aeropuerto Internacional">Aeropuerto Internacional</option>
+            <option value="Oficina Centro Histórico">Oficina Centro Histórico</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="date" id="startDate" class="bg-white border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+          <select id="startTime" class="bg-white border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="10:00">10:00 AM</option>
+            <option value="12:00">12:00 PM</option>
+            <option value="14:00">02:00 PM</option>
+            <option value="16:00">04:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 2: Devolución -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <div class="text-sm font-black text-slate-700 uppercase">Devolución</div>
+        <div>
+          <select id="returnLocation" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="" disabled selected>¿Dónde termina tu viaje?</option>
+            <option value="Aeropuerto Internacional">Aeropuerto Internacional</option>
+            <option value="Oficina Centro Histórico">Oficina Centro Histórico</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <input type="date" id="endDate" class="bg-white border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400" required>
+          <select id="endTime" class="bg-white border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="10:00">10:00 AM</option>
+            <option value="12:00">12:00 PM</option>
+            <option value="14:00">02:00 PM</option>
+            <option value="16:00">04:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila 3: Pasajeros, Edad y Tipo de Vehículo -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <div>
+          <label class="block text-[10px] uppercase font-black text-slate-400 mb-1">Edad Conductor</label>
+          <select id="driverAge" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="25+">25 +</option>
+            <option value="21-24">21 - 24</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] uppercase font-black text-slate-400 mb-1">Tipo de Vehículo</label>
+          <select id="vehicleTypeFilter" onchange="filterVehicles()" class="w-full bg-white border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+            <option value="TODOS">TODOS</option>
+            <option value="ECONOMY CAR">ECONOMY CAR</option>
+            <option value="COMPACT CAR">COMPACT CAR</option>
+            <option value="INTERMEDIATE CAR">INTERMEDIATE CAR</option>
+            <option value="STANDARD CAR">STANDARD CAR</option>
+            <option value="FULLSIZE CAR">FULLSIZE CAR</option>
+            <option value="PREMIUM CAR">PREMIUM CAR</option>
+            <option value="LUXURY CAR">LUXURY CAR</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="flex items-center justify-between bg-white border border-slate-300 rounded-xl p-2.5">
+            <span class="text-xs font-bold text-slate-600 px-1">Adultos</span>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="adjustCount('adultsCount', -1)" class="w-6 h-6 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200">-</button>
+              <span id="adultsCount" class="text-sm font-bold w-4 text-center">1</span>
+              <button type="button" onclick="adjustCount('adultsCount', 1)" class="w-6 h-6 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200">+</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between bg-white border border-slate-300 rounded-xl p-2.5">
+            <span class="text-xs font-bold text-slate-600 px-1">Niños</span>
+            <div class="flex items-center gap-1">
+              <button type="button" onclick="adjustCount('childrenCount', -1)" class="w-6 h-6 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200">-</button>
+              <span id="childrenCount" class="text-sm font-bold w-4 text-center">0</span>
+              <button type="button" onclick="adjustCount('childrenCount', 1)" class="w-6 h-6 bg-slate-100 rounded-lg font-bold text-slate-600 hover:bg-slate-200">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Catálogo de Vehículos Disponibles (Tarjetas) -->
+    <div class="max-w-5xl mx-auto space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-xl font-black text-white tracking-wide">Catálogo Completo de la Flota</h3>
+        <span class="text-xs font-bold text-slate-400 uppercase">Selecciona tu opción de pago preferida</span>
+      </div>
+
+      <div id="vehiclesGrid" class="space-y-4">
+        <div class="text-center py-12 text-slate-500 font-medium">Cargando flota disponible...</div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Modal de Formulario de Datos del Cliente al Reservar -->
+  <div id="bookingModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white text-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative">
+      <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 text-xl font-bold">&times;</button>
+      <div>
+        <h3 class="text-2xl font-black text-slate-900">Finalizar Reserva</h3>
+        <p class="text-xs text-slate-500">Ingresa tus datos personales para completar el registro.</p>
+      </div>
+
+      <form id="bookingForm" onsubmit="submitReservation(event)" class="space-y-4">
+        <input type="hidden" id="selectedVehicleId">
+        <input type="hidden" id="selectedPaymentType">
+        <input type="hidden" id="selectedPrice">
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nombre Completo</label>
+          <input type="text" id="clientName" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Correo Electrónico</label>
+          <input type="email" id="clientEmail" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Teléfono</label>
+          <input type="tel" id="clientPhone" required class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-400">
+        </div>
+
+        <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3.5 rounded-xl uppercase tracking-wider transition shadow-lg">
+          Confirmar Reserva
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript del Sistema -->
+  <script>
+    let allVehicles = [];
+
+    function adjustCount(elementId, delta) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      let val = parseInt(el.innerText) + delta;
+      if (elementId === "adultsCount" && val < 1) val = 1;
+      if (elementId === "childrenCount" && val < 0) val = 0;
+      el.innerText = val;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // Regla de 24 horas mínimas para fecha de inicio
+      const startInput = document.getElementById("startDate");
+      const endInput = document.getElementById("endDate");
+
+      if (startInput && endInput) {
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowStr = tomorrow.toISOString().split("T")[0];
+
+        startInput.min = tomorrowStr;
+        startInput.value = tomorrowStr;
+
+        const updateEndMin = function() {
+          const startVal = new Date(startInput.value);
+          const minEnd = new Date(startVal);
+          minEnd.setDate(minEnd.getDate() + 1);
+          const minEndStr = minEnd.toISOString().split("T")[0];
+
+          endInput.min = minEndStr;
+          endInput.value = minEndStr;
+        };
+
+        updateEndMin();
+        startInput.addEventListener("change", updateEndMin);
+      }
+
+      loadVehicles();
+    });
+
+    async function loadVehicles() {
+      try {
+        const res = await fetch("/api/vehicles");
+        if (!res.ok) throw new Error("Error al obtener vehículos");
+        allVehicles = await res.json();
+        renderVehicles(allVehicles);
+      } catch (err) {
+        console.error(err);
+        document.getElementById("vehiclesGrid").innerHTML = '<div class="text-center py-8 text-red-400">Error al cargar la flota disponible.</div>';
+      }
+    }
+
+    function filterVehicles() {
+      const typeFilter = document.getElementById("vehicleTypeFilter").value;
+      if (typeFilter === "TODOS") {
+        renderVehicles(allVehicles);
+      } else {
+        const filtered = allVehicles.filter(v => (v.category || "ECONOMY CAR") === typeFilter);
+        renderVehicles(filtered);
+      }
+    }
+
+    function renderVehicles(vehicles) {
+      const grid = document.getElementById("vehiclesGrid");
+      if (!vehicles || vehicles.length === 0) {
+        grid.innerHTML = '<div class="bg-slate-800 text-center py-12 rounded-2xl text-slate-400">No hay vehículos disponibles para esta categoría.</div>';
+        return;
+      }
+
+      grid.innerHTML = vehicles.map(v => {
+        const baseRate = v.daily_rate || 2500;
+        const counterRate = Math.round(baseRate * 0.9); // -10%
+        const counterSave = baseRate - counterRate;
+        const onlineRate = Math.round(baseRate * 0.7); // -30%
+        const onlineSave = baseRate - onlineRate;
+        const category = v.category || "ECONOMY CAR";
+
+        return `
+          <div class="bg-slate-800 border border-slate-700 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 hover:border-slate-600 transition">
+            <div class="space-y-3 w-full md:w-1/3 text-center md:text-left">
+              ${v.is_offer ? '<span class="bg-amber-500 text-slate-950 font-black text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">🔥 Oferta Especial</span>' : ''}
+              <h4 class="text-xl font-black text-white">${v.name}</h4>
+              <div class="text-xs text-amber-400 font-bold uppercase tracking-wider">${category} / EV</div>
+              <div class="text-xs text-slate-300 space-y-1">
+                <div>⚡ Autonomía: <strong class="text-white">${v.autonomy_km} km</strong></div>
+                <div>🔋 Batería: <strong class="text-white">${v.battery_kwh} kWh</strong></div>
+                <div>👥 Capacidad: <strong class="text-white">${v.capacity || 5} Pasajeros</strong></div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full md:w-2/3 border-t md:border-t-0 md:border-l border-slate-700 pt-4 md:pt-0 md:pl-6">
+              <!-- Pago en Mostrador -->
+              <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-700 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between text-xs font-bold text-slate-400 mb-1">
+                    <span>Pago en Mostrador</span>
+                    <span class="text-amber-400">-10%</span>
+                  </div>
+                  <div class="text-xl font-black text-white">$${counterRate.toLocaleString()} <span class="text-xs font-normal text-slate-400">MXN</span></div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">Ahorras: $${counterSave.toLocaleString()} MXN</div>
+                </div>
+                <button onclick="openBookingModal(${v.id}, 'Mostrador', ${counterRate})" class="mt-4 w-full bg-slate-700 hover:bg-amber-500 hover:text-slate-950 text-white font-black py-2.5 rounded-xl uppercase text-xs tracking-wider transition">
+                  Reservar
+                </button>
+              </div>
+
+              <!-- Pago en Línea -->
+              <div class="bg-slate-900/60 p-4 rounded-2xl border border-amber-500/50 flex flex-col justify-between relative">
+                <span class="absolute -top-2.5 right-4 bg-amber-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Mejor Precio</span>
+                <div>
+                  <div class="flex items-center justify-between text-xs font-bold text-slate-400 mb-1">
+                    <span>Pago en Línea</span>
+                    <span class="text-amber-400">-30%</span>
+                  </div>
+                  <div class="text-xl font-black text-white">$${onlineRate.toLocaleString()} <span class="text-xs font-normal text-slate-400">MXN</span></div>
+                  <div class="text-[10px] text-slate-400 mt-0.5">Ahorras: $${onlineSave.toLocaleString()} MXN</div>
+                </div>
+                <button onclick="openBookingModal(${v.id}, 'En Línea', ${onlineRate})" class="mt-4 w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-2.5 rounded-xl uppercase text-xs tracking-wider transition shadow-lg">
+                  Reservar
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function openBookingModal(vehicleId, paymentType, price) {
+      const pickupLoc = document.getElementById("pickupLocation").value;
+      if (!pickupLoc) {
+        alert("Por favor selecciona primero el lugar de recolección en la sección de reserva.");
+        document.getElementById("pickupLocation").focus();
+        return;
+      }
+
+      document.getElementById("selectedVehicleId").value = vehicleId;
+      document.getElementById("selectedPaymentType").value = paymentType;
+      document.getElementById("selectedPrice").value = price;
+      document.getElementById("bookingModal").classList.remove("hidden");
+      document.getElementById("bookingModal").classList.add("flex");
+    }
+
+    function closeBookingModal() {
+      document.getElementById("bookingModal").classList.remove("flex");
+      document.getElementById("bookingModal").classList.add("hidden");
+    }
+
+    async function submitReservation(event) {
+      event.preventDefault();
+
+      const clientData = {
+        name: document.getElementById("clientName").value,
+        email: document.getElementById("clientEmail").value,
+        phone: document.getElementById("clientPhone").value
+      };
+
+      try {
+        // 1. Registrar cliente
+        const clientRes = await fetch("/api/clients", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(clientData)
+        });
+        if (!clientRes.ok) throw new Error("Error al registrar cliente");
+        const client = await clientRes.json();
+
+        // 2. Crear reserva
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const startDt = new Date(startDate);
+        const endDt = new Date(endDate);
+        const diffTime = Math.abs(endDt - startDt);
+        const diffDays = Math.max(1, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+
+        const unitPrice = parseFloat(document.getElementById("selectedPrice").value);
+        const totalAmount = unitPrice * diffDays;
+
+        const reservationData = {
+          client_id: client.id,
+          vehicle_id: parseInt(document.getElementById("selectedVehicleId").value),
+          pickup_location: document.getElementById("pickupLocation").value,
+          return_location: document.getElementById("returnLocation").value || document.getElementById("pickupLocation").value,
+          start_date: startDate,
+          end_date: endDate,
+          total_days: diffDays,
+          total_price: totalAmount,
+          status: "Confirmada"
+        };
+
+        const resRes = await fetch("/api/reservations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(reservationData)
+        });
+
+        if (!resRes.ok) throw new Error("Error al crear reserva");
+        const resData = await resRes.json();
+
+        alert("¡Reserva confirmada con éxito! Folio: " + (resData.folio || "REV-" + Math.floor(Math.random()*100000)));
+        closeBookingModal();
+        document.getElementById("bookingForm").reset();
+      } catch (err) {
+        console.error(err);
+        alert("Ocurrió un error al procesar la reserva. Por favor intenta de nuevo.");
+      }
+    }
+  </script>
+</body>
+</html>
+""")
+
+print("¡Frontend reescrito y optimizado al 100%!")
