@@ -22,8 +22,6 @@ jobs:
           pip install pytest httpx fastapi pydantic sqlalchemy psycopg2-binary
 
       - name: Run Backend Tests
-        env:
-          DATABASE_URL: sqlite:///:memory:
         run: |
           cd backend
           pytest test_api.py -v
