@@ -27,10 +27,6 @@ jobs:
         run: |
           cd backend
           pytest test_api.py -v
-          python -m pip install --upgrade pip
-          pip install pytest httpx fastapi pydantic sqlalchemy psycopg2-binary
-
-      
 
       - name: Deploy to DigitalOcean Server via SSH
         uses: appleboy/ssh-action@v1.0.3
